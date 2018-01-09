@@ -1,0 +1,154 @@
+@media screen and (min-width: 700px) {
+	.wrap {
+		width: 700px;
+		margin: 0 auto
+	}
+
+	header {
+		padding: 20px 100px
+	}
+}
+
+@media screen and (max-width: 700px) {
+	.wrap {
+		width: 100%
+	}
+
+	header {
+		padding: 20px 0
+	}
+
+	header a.logo-link,header ul.nav.nav-list {
+		float: none;
+		display: block;
+		text-align: center
+	}
+
+	header li.nav-list-item {
+		padding: 10px 10px
+	}
+
+	main.container,.home.post-list,.archive {
+		margin-top: 0
+	}
+
+	.archive .post-item {
+		padding-left: 20px
+	}
+
+	.post-content h2,.post-content h3,.post-content h4,.post-content h5,.post-content h6 {
+		max-width: 300px;
+		left: 15px
+	}
+
+	.ds-thread,#disqus_thread {
+		margin: 2em 10px
+	}
+}
+
+body {
+	margin: 0;
+	color: #34495e;
+	font-size: 15px;
+	line-height: 1.6;
+	background-color: #fff;
+	font-family: 'sourcesanspro', 'Helvetica Neue', Arial, sans-serif
+}
+
+ul.nav,ul.post-list {
+	margin: 0;
+	padding: 0;
+	list-style-type: none
+}
+
+ul {
+	margin: 1rem 0
+}
+
+a,a:active {
+	color: #2c3e50;
+	text-decoration: none
+}
+
+a.nav-list-link.active,a.nav-list-link:hover,a.post-title-link:hover {
+	border-bottom: 2px solid #42b983
+}
+
+hr {
+	border: 0
+}
+
+header {
+	min-height: 60px
+}
+
+header .logo-link {
+	float: left
+}
+
+
+
+header .nav {
+}
+
+header .logo-link img {
+	height: 60px;
+	-webkit-border-radius:30px;
+	border-radius:30px;
+	margin: 0 20px 10px 20px;
+}
+
+header .nav-list-item {
+	display: inline-block;
+	padding: 19px  10px
+}
+
+header .nav-list-item a {
+	font-size: 16px;
+	line-height: 1.4
+}
+
+main.container {
+    margin: 2em 10px;
+}
+
+.post-block img {
+    display: block;
+    max-width: 100%;
+    margin: 1em auto;
+}
+
+.post-block .post-title {
+    margin: 0.65em 0;
+    color: #2c3e50;
+    font-size: 1.5em;
+}
+
+.post-block .post-info {
+    color: #7f8c8d;
+    margin: 1.2em 0;
+}
+
+footer {
+	padding-bottom: 1px
+}
+
+footer .copyright {
+	margin: 4em 0;
+	border-top: 1px solid #ddd;
+	text-align: center
+}
+
+footer .copyright p,footer .copyright a {
+	color: #aaa;
+	font-size: 14px;
+	font-weight: 100
+}
+
+footer .copyright a:hover {
+	color: #888
+}
+
+@font-face {
+	font-family:'sourcesanspro';src:url("../font/sourcesanspro.woff2") format("woff2"),url("../font/sourcesanspro.woff") format("woff");font-weight:normal;font-style:normal
+}

@@ -1,0 +1,23 @@
+<html>
+<head>
+</head>
+
+<body>
+	<ul class="nav nav-list">
+		<li class="nav-list-item">
+			<a href="/archives" target="_self" class="nav-list-link">ARCHIVES</a>
+		</li>
+		<li class="nav-list-item">
+			<a href="/products" target="_self" class="nav-list-link">PRODUCTS</a>
+		</li>
+		<li class="nav-list-item">
+			<a href="/about" target="_self" class="nav-list-link">ABOUT</a>
+		</li>
+		<li class="nav-list-item">
+			<a href="https://github.com/linroid" target="_blank" class="nav-list-link">GITHUB</a>
+		</li><li class="nav-list-item">
+			<a href="https://instagram.com/linroid/" target="_blank" class="nav-list-link">INSTAGRAM</a>
+		</li>
+	</ul>
+</body>
+</html>

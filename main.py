@@ -221,6 +221,7 @@ def general_posts(articles):
 
 # 生成关于我也没
 def general_about():
+    print('生成about页面')
     about_path = 'public/about'
     md_file_path = 'md_files/about.md'
     create_dir(about_path)

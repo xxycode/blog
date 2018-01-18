@@ -33,6 +33,14 @@ def get_article_display_time(file_path):
     return time.strftime('%b %d, %Y', time_str)
 
 
+# 年
+def get_article_year(file_path):
+    file_path = unicode(file_path, 'utf8')
+    t = get_article_date(file_path)
+    time_str = time.localtime(t)
+    return time.strftime('%Y', time_str)
+
+
 # 获取配置项
 def get_config(key):
     config_file_path = 'config.json'
@@ -81,33 +89,44 @@ def copy_theme_files():
 
 
 # 根据模板文件生成html
-def general_article_html(content, title='', c_time='', n_link='', p_link=''):
+def general_article_html(content, title='', c_time='', n_link='', p_link='', template='post'):
     html_str = md2html(content)
+    template_content = get_template_content(template)
+    html_content = template_content.replace(str("{content}"), str(html_str))
+    html_content = html_content.replace(str("{title}"), str(title))
+    html_content = html_content.replace(str("{c_time}"), str(c_time))
+    host = get_config('host')
+    html_content = html_content.replace(str("{host}"), str(host))
+    page_nav = ''
+    if p_link != '':
+        pre_template = get_template_content('page_nav_pre')
+        pre_html = pre_template.replace(str("{link}"), str(p_link))
+        page_nav += pre_html
+    if n_link != '':
+        next_template = get_template_content('page_nav_next')
+        next_html = next_template.replace(str("{link}"), str(n_link))
+        page_nav += next_html
+    html_content = html_content.replace(str("{page_nav}"), str(page_nav))
+    return html_content
+
+
+# 根据模板文件名获取模板内容
+def get_template_content(file_name):
     theme_path = get_theme_path()
-    article_template_path = theme_path + 'post.xt'
-    template = open(article_template_path, 'r')
+    file_path = theme_path + file_name + '.xt'
+    template = open(file_path, 'r')
     template_content = ''
     for line in template:
         template_content += line
     template.close()
-    html_content = template_content.replace(str("{content}"), str(html_str))
-    html_content = html_content.replace(str("{title}"), str(title))
-    html_content = html_content.replace(str("{c_time}"), str(c_time))
-    page_nav = ''
-    if p_link != '':
-        page_nav += '<a href=\"' + p_link + '\" class=\"prev\">PREV</a>'
-    if n_link != '':
-        page_nav += '<a href=\"' + n_link + '\" class=\"next\">NEXT</a>'
-    html_content = html_content.replace(str("{page_nav}"), str(page_nav))
-    print('page_nav是:' + str(page_nav))
-    return html_content
+    return template_content
 
 
 # md转html
-def md2html(mdStr):
+def md2html(md_str):
     exts = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.tables',
             'markdown.extensions.toc']
-    ret = markdown.markdown(mdStr, extensions=exts)
+    ret = markdown.markdown(md_str, extensions=exts)
     return ret
 
 
@@ -131,33 +150,34 @@ def get_article_title(article):
 
 # 获取文件的指定行数
 def get_file_line(path, line):
-    file = open(path, 'r')
-    lines = file.readlines()
+    m_file = open(path, 'r')
+    lines = m_file.readlines()
     if line >= len(lines):
         return ''
-    file.close()
+    m_file.close()
     return lines[line]
+
+
+# 创建一个目录，没有就创建，有就不做任何操作
+def create_dir(dir_path):
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
 
 
 # 生成文章详情页
 def general_posts(articles):
     articles.sort(cmp=compare)
-    articles_list = [];
+    articles_list = []
     for article in articles:
         create_time = get_article_create_time(article)
-        time_infos = create_time.split('-')
-
+        time_info_arr = create_time.split('-')
         article_path_info = article.split('/')
         article_file_info = article_path_info[1].split('.')
-        article_fle_name = article_file_info[0]
-
+        article_file_name = article_file_info[0]
         public_path = 'public'
-        archive_path = '/' + time_infos[0] + '/' + time_infos[1] + '/' + time_infos[2] + '/' + article_fle_name
-        article_path = public_path + '/' + time_infos[0] + '/' + time_infos[1] + '/' + time_infos[2] + '/' + article_fle_name
-        # 没有当天的目录就创建一个
-        if not os.path.exists(article_path):
-            os.makedirs(article_path)
-
+        archive_path = '/' + time_info_arr[0] + '/' + time_info_arr[1] + '/' + time_info_arr[2] + '/' + article_file_name
+        article_path = public_path + '/' + time_info_arr[0] + '/' + time_info_arr[1] + '/' + time_info_arr[2] + '/' + article_file_name
+        create_dir(article_path)
         article_title = get_article_title(article)
         article_file = open(article, 'r')
         article_content = ''
@@ -170,6 +190,7 @@ def general_posts(articles):
         article_dic = {'content': article_content,
                        'title': article_title,
                        'time': get_article_display_time(article),
+                       'year': get_article_year(article),
                        'link': archive_path,
                        'article_path': article_path
                        }
@@ -192,8 +213,101 @@ def general_posts(articles):
         html_file = open(html_path, 'w')
         html_file.write(html_content)
         html_file.close()
-
         print('根据' + article + '，生成：' + html_path)
+        general_home(article_dic, index, len(articles_list))
+    general_archives(articles_list)
+
+
+# 生成首页
+def general_home(article_dic, index, count):
+    n_link = ''
+    p_link = ''
+    article_path = 'public/page/' + str(index + 1)
+    create_dir(article_path)
+    if index == 0:
+        article_path = 'public/'
+    if index > 0:
+        p_link = '/page/' + str(index - 1)
+        if index == 1:
+            p_link = '/'
+    if index < count - 1:
+        n_link = '/page/' + str(index + 1 + 1)
+    article_content = article_dic['content']
+    article_title = article_dic['title']
+    display_time = article_dic['time']
+    html_content = general_article_html(article_content, article_title, display_time, n_link, p_link, 'index')
+    html_path = article_path + '/index.html'
+    if os.path.exists(html_path):
+        os.remove(html_path)
+    html_file = open(html_path, 'w')
+    html_file.write(html_content)
+    html_file.close()
+    print('根据' + article_dic['article_path'] + '，生成：' + html_path)
+
+
+# 生成archive页面
+def general_archives(articles):
+    print('开始生成archives...')
+    max_count = int(get_config('archive_item_count'))
+    current_count = 0
+    total_count = 0
+    ori_file_path = 'public/archives'
+    archive_list_item_template = get_template_content('archive_list_item')
+    archive_year_template = get_template_content('archive_year')
+    archive_container_template = get_template_content('archive_container')
+    archive_page_template = get_template_content('archives')
+    current_year = articles[0]['year']
+    container_str = ''
+    for index, article_dic in enumerate(articles):
+        year = article_dic['year']
+        if year != current_year or current_count == 0:
+            year_tmp = archive_year_template.replace(str('{year}'), str(year))
+            container_str += year_tmp
+            current_year = year
+        list_item_tmp = archive_list_item_template.replace(str('{display_time}'), str(article_dic['time']))
+        list_item_tmp = list_item_tmp.replace(str('{link}'), str(article_dic['link']))
+        list_item_tmp = list_item_tmp.replace(str('{title}'), str(article_dic['title']))
+        container_str += list_item_tmp
+        total_count += 1
+        current_count += 1
+        if total_count % max_count == 0 or total_count == len(articles):
+            current_count = 0
+            current_page = int(total_count / max_count)
+            next_link = '/archives/page/' + str(current_page + 1)
+            if total_count == len(articles):
+                current_page += 1
+                next_link = ''
+            pre_link = '/archives/page/' + str(current_page - 1)
+            if current_page - 1 == 1:
+                pre_link = '/archives/'
+            current_file_path = ori_file_path + '/page/' + str(current_page)
+            if current_page == 1:
+                current_file_path = ori_file_path
+                pre_link = ''
+            page_nav = ''
+            if pre_link != '':
+                pre_template = get_template_content('page_nav_pre')
+                pre_html = pre_template.replace(str("{link}"), str(pre_link))
+                page_nav += pre_html
+            if next_link != '':
+                next_template = get_template_content('page_nav_next')
+                next_html = next_template.replace(str("{link}"), str(next_link))
+                page_nav += next_html
+            create_dir(current_file_path)
+            tmp_container = archive_container_template.replace(str("{container}"), str(container_str))
+            tmp_archives = archive_page_template.replace(str("{archives}"), str(tmp_container))
+            host = get_config('host')
+            tmp_archives = tmp_archives.replace(str("{host}"), str(host))
+            tmp_archives = tmp_archives.replace(str("{page_nav}"), str(page_nav))
+            html_file_path = current_file_path + '/index.html'
+            if os.path.exists(html_file_path):
+                os.remove(html_file_path)
+            html_file = open(html_file_path, 'w')
+            html_file.write(tmp_archives)
+            html_file.close()
+            print('生成：'+html_file_path+' currentpage: '+str(current_page))
+            container_str = ''
+
 
 
 # 更新博客
@@ -234,6 +348,8 @@ def new_blog():
     md_file.write('title:' + title + '\n')
     md_file.write('date:' + str(create_time) + '\n')
     md_file.close()
+    command = 'open ' + file_path
+    os.system(command)
     print('md文件创建完成：' + file_path)
 
 

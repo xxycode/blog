@@ -1,3 +1,5 @@
 {
-	"theme":"default"
+	"theme":"default",
+	"host":"http://localhost:8000",
+	"archive_item_count":15
 }

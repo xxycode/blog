@@ -129,6 +129,29 @@ main.container {
     margin: 1.2em 0;
 }
 
+.archive {
+    max-width: 500px;
+    margin: 5em auto;
+}
+
+.archive .post-info {
+    float: left;
+    width: 125px;
+    color: #7f8c8d;
+}
+
+.archive .post-title-link {
+    display: block;
+    margin-left: 125px;
+    color: #42b983;
+    word-break: break-all;
+}
+
+.archive .post-title-link:hover {
+	border-bottom: 0;
+	color: #267B54
+}
+
 footer {
 	padding-bottom: 1px
 }

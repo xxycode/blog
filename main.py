@@ -93,7 +93,13 @@ def general_article_html(content, title='', c_time='', n_link='', p_link=''):
     html_content = template_content.replace(str("{content}"), str(html_str))
     html_content = html_content.replace(str("{title}"), str(title))
     html_content = html_content.replace(str("{c_time}"), str(c_time))
-
+    page_nav = ''
+    if p_link != '':
+        page_nav += '<a href=\"' + p_link + '\" class=\"prev\">PREV</a>'
+    if n_link != '':
+        page_nav += '<a href=\"' + n_link + '\" class=\"next\">NEXT</a>'
+    html_content = html_content.replace(str("{page_nav}"), str(page_nav))
+    print('page_nav是:' + str(page_nav))
     return html_content
 
 
@@ -114,8 +120,8 @@ def compare(x, y):
 
 # 获取文章日期
 def get_article_date(article):
-    aTime = int(get_file_line(article, 1).replace('date:', ''))
-    return aTime
+    a_time = int(get_file_line(article, 1).replace('date:', ''))
+    return a_time
 
 
 # 获取文章标题
@@ -136,6 +142,7 @@ def get_file_line(path, line):
 # 生成文章详情页
 def general_posts(articles):
     articles.sort(cmp=compare)
+    articles_list = [];
     for article in articles:
         create_time = get_article_create_time(article)
         time_infos = create_time.split('-')
@@ -160,8 +167,25 @@ def general_posts(articles):
                 article_content += line
             i += 1
         article_file.close()
-
-        html_content = general_article_html(article_content, article_title, get_article_display_time(article))
+        article_dic = {'content': article_content,
+                       'title': article_title,
+                       'time': get_article_display_time(article),
+                       'link': archive_path,
+                       'article_path': article_path
+                       }
+        articles_list.append(article_dic)
+    for index, article_dic in enumerate(articles_list):
+        article_content = article_dic['content']
+        article_title = article_dic['title']
+        display_time = article_dic['time']
+        article_path = article_dic['article_path']
+        n_link = ''
+        p_link = ''
+        if index > 0:
+            p_link = articles_list[index - 1]['link']
+        if index < len(articles_list) - 1:
+            n_link = articles_list[index + 1]['link']
+        html_content = general_article_html(article_content, article_title, display_time, n_link, p_link)
         html_path = article_path + '/index.html'
         if os.path.exists(html_path):
             os.remove(html_path)
@@ -213,6 +237,13 @@ def new_blog():
     print('md文件创建完成：' + file_path)
 
 
+def start_http_server():
+    command = 'cd Public'
+    os.system(command)
+    command = 'python -m SimpleHTTPServer'
+    os.system(command)
+
+
 # 主函数
 def main():
     argv = sys.argv
@@ -224,6 +255,7 @@ def main():
         new_blog()
     elif cmd == 'update' or cmd == 'up':
         update_blog()
-
+    elif cmd == 'start' or cmd == 's':
+        start_http_server()
 
 main()

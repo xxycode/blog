@@ -29,12 +29,15 @@
 			<div class="post">
 				<article class="post-block">
 					<h1 class="post-title">{title}</h1>
-					<div class="post-info">{cTime}</div>
+					<div class="post-info">{c_time}</div>
 					{content}
 				</article>
 			</div>
 		</main>
 		<footer>
+		    <div class="paginator">
+		        {page_nav}
+		    </div>
 			<div class="copyright">
 				<p>©2017 <a href="http://xxycode.com">叉叉歪</a>, Powered by Python and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.
 				</p>

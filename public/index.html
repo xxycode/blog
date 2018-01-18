@@ -3,7 +3,7 @@
 	<link rel="stylesheet" type="text/css" href="http://www.xxycode.com/css/style.css" />
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>第一篇文章，测试使用
+	<title>求职面试经历
 </title>
 </head>
 
@@ -28,17 +28,40 @@
 		<main class="container">
 			<div class="post">
 				<article class="post-block">
-					<h1 class="post-title"><a href="/2018/01/18/firstpost">第一篇文章，测试使用
+					<h1 class="post-title"><a href="/2018/01/18/2017-mian-shi-jing-li">求职面试经历
 </a></h1>
 					<div class="post-info">Jan 18, 2018</div>
-					<p>这是测试用的，第一篇文章
-hello world</p>
+					<h4 id="_1">序</h4>
+<blockquote>
+<p>2017年是我的本命年，这一年发生了很多事情，也不想再回忆之前的事情，2015年毕业，我加入了YY，之后在2016年3月份离职，加入了一家创业公司，这其中的经历不是很愉快就不说了，在2017年7月份开始找新的工作，毕业到现在我一直是做iOS开发，而且比较巧合的是两年以内做的项目都是和直播相关的，所以我也比较倾向于这方面的项目。</p>
+</blockquote>
+<h4 id="_2">正文</h4>
+<p>下面来分享一下我在17年面试的经历。</p>
+<h4 id="1">1、脸萌科技</h4>
+<p>这是我投的第一家公司，大家应该也都知道吧，最开始做脸萌APP火了一把，现在主要是在做Faceu，而且也拿到了美团的投资。<br />
+约的是下午2点的面试，但是我怕找不到地方，1点左右就到了，这个时候大家都在睡午觉，我在茶水间的沙发上等了一段时间，公司氛围，办公环境都很好。<br />
+一面，面试官是带着电脑过来的，先问了一些iOS比较基础的问题，网上的面试题基本都覆盖到了，然后问了GCD相关的知识，这里强烈推荐大家去看一下<a href="https://bestswifter.com/deep-gcd/">这篇</a>文章，讲得很详细，看完文章，自己再实践一下，基本可以应付大部分GCD相关的问题，接着聊了一下自己过去做的项目，我之前主要是做直播的，聊了一些音视频开发。大概聊了差不多1个小时，面试官要我等一下，这时觉得一面应该是过了。<br />
+二面，二面首先是问我项目相关的问题，然后问我遇到的一些问题，是怎么解决了，我主要说了三个方面，第一个方面是tableView的优化，主要是高度缓存做缓存，在拿到网络数据的时候在子线程计算好高度和布局再去刷新界面，然后就是减少层级，对一些文字，图标的内容和圆角，阴影在子线程绘制成图片，然后再加载到一个layer上面，cell中避免使用autolayout等。第二个方面讲到了直播间弹幕优化的，我说道了我使用苹果的游戏引擎来绘制弹幕，并且大大提升了帧率，说到这点的时候，面试官表现出了强烈的兴趣，我又说了具体的实现过程，SpriteKit是苹果在iOS7.0之后推出的一套游戏引擎，按照苹果官方的说法：</p>
+<blockquote>
+<p>The SpriteKit framework adds new features to make it easier to create high-performance, battery-efficient 2D games. With support for custom OpenGL ES shaders and lighting, integration with SceneKit, and advanced new physics effects and animations, you can add force fields, detect collisions, and generate new lighting effects in your games.</p>
+</blockquote>
+<p>是一套高性能的游戏框架，用来做弹幕非常好，API很简单，非常容易上手。接下来我说了一下对于webview的优化，在之前的项目中，我对webview图片加载做了优化，把html里面的图片拿出来用SDWebImage来下载，通过监听scrollview来做到按需加载，这样所有网络图片都交由SDWebImage来管理，具体实现可以参考<a href="http://kittenyang.com/webview-javascript-bridge/">这一篇</a>文章，大体思路差不多。说完之后面试官好像比较满意，然后出了一个简单的代码题，给我一台电脑，让我现场敲出来，我很喜欢这种面试方式。题目大概是这样的：</p>
+<blockquote>
+<p>给出两个字符串a和b，其中b中的字符是不重复的，要求在a中去除b字符串中包含的字母。例如：输入"hello world"和"eo"，应该输出："hll wrld"。</p>
+</blockquote>
+<p>当时一看，这不是送分题吗，面试官还说可以查资料，我说不用，当时很快写了出来，想都没想就用遍历。结果符合预期，面试官要我说了一下思路，问了一下时间复杂度，是O(N*M)然后再问有没有什么办法可以降低时间复杂度呢，我想了一会，可以用一个哈希表来记录每个字符在b中出现的次数，默认是0，输入b的时候就把b中出现过的字符的次数记为1，然后再遍历一次a，过滤掉出现次数是1的字符就可以了，时间复杂度是O(N+M)。面试官又问我还有没有更高效的方法呢，我想了一会，没有找到，就暂时想不到。其实这个题如果我一开始就给出优化后的答案，给面试官的印象应该更好一些，只怪自己太浮躁了，就当吸取一个教训。然后接下来就是问我有没有什么想问他的问题，随便说了几个。接着要我等一下，面了HR面，谈到了工资，觉得应该是稳了。整个面试过程大概3个多小时。</p>
+<blockquote>
+<p>总结：
+公司环境不错，氛围也比较好，顺利拿到offer。
+面试内容方面：iOS基础，运行时，多线程，然后就是根据项目提问，还有一个简单的机试题。
+自己还是比较浮躁，面试的使用应该表现得沉稳一点，最好一次能给出最好的解决方案，要考虑全面。</p>
+</blockquote>
 				</article>
 			</div>
 		</main>
 		<footer>
 		    <div class="paginator">
-		        
+		        <a href="/page/2" class="next">NEXT</a>
 		    </div>
 			<div class="copyright">
 				<p>©2017 <a href="http://xxycode.com">TwitchXiao</a>, Powered by Python and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.

@@ -214,18 +214,41 @@ def general_posts(articles):
         html_file.write(html_content)
         html_file.close()
         print('根据' + article + '，生成：' + html_path)
-        general_home(article_dic, index, len(articles_list))
+        general_home(article_dic, index, len(articles_list), article_dic['link'])
     general_archives(articles_list)
+    general_about()
+
+
+# 生成关于我也没
+def general_about():
+    about_path = 'public/about'
+    md_file_path = 'md_files/about.md'
+    create_dir(about_path)
+    article_file = open(md_file_path, 'r')
+    article_content = ''
+    i = 0
+    for line in article_file:
+        if i >= 2:
+            article_content += line
+        i += 1
+    article_file.close()
+    html_content = general_article_html(article_content, '关于我', '', '', '')
+    html_path = about_path + '/index.html'
+    if os.path.exists(html_path):
+        os.remove(html_path)
+    html_file = open(html_path, 'w')
+    html_file.write(html_content)
+    html_file.close()
 
 
 # 生成首页
-def general_home(article_dic, index, count):
+def general_home(article_dic, index, count, link):
     n_link = ''
     p_link = ''
     article_path = 'public/page/' + str(index + 1)
     create_dir(article_path)
     if index == 0:
-        article_path = 'public/'
+        article_path = 'public'
     if index > 0:
         p_link = '/page/' + str(index - 1)
         if index == 1:
@@ -236,6 +259,7 @@ def general_home(article_dic, index, count):
     article_title = article_dic['title']
     display_time = article_dic['time']
     html_content = general_article_html(article_content, article_title, display_time, n_link, p_link, 'index')
+    html_content = html_content.replace(str('{link}'), str(link))
     html_path = article_path + '/index.html'
     if os.path.exists(html_path):
         os.remove(html_path)
@@ -309,7 +333,6 @@ def general_archives(articles):
             container_str = ''
 
 
-
 # 更新博客
 def update_blog():
     print('正在更新博客...')
@@ -321,7 +344,7 @@ def update_blog():
     s = []
     for article in articles:
         if not os.path.isdir(article):
-            if article.endswith(".md"):
+            if article.endswith(".md") and article != 'about.md':
                 str = article_path + '/' + article
                 s.append(str)
     general_posts(s)

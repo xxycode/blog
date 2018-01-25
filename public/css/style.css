@@ -152,6 +152,11 @@ main.container {
 	color: #267B54
 }
 
+.post-content a {
+    color: #42b983;
+    word-break: break-all;
+}
+
 blockquote {
 	padding: 5px 15px;
     color: #777;

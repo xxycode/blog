@@ -152,6 +152,15 @@ main.container {
 	color: #267B54
 }
 
+blockquote {
+	padding: 5px 15px;
+    color: #777;
+    border-left: 4px solid #ddd;
+    margin: 0 0 0 10px;
+    background-color: #e4e4e4;
+}
+}
+
 footer {
 	padding-bottom: 1px
 }
